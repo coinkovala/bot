@@ -35,12 +35,28 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        #coinAmount {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #countdown {
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="https://images.theconversation.com/files/38926/original/5cwx89t4-1389586191.jpg" alt="Meme Sticker">
+        <div id="coinAmount">Coins: 0</div>
         <button id="startButton">Start Earning Coins</button>
+        <div id="countdown"></div>
     </div>
 
     <script>
@@ -63,6 +79,49 @@
             console.error("Telegram Web App API yüklenemedi");
             alert("This page should be opened as a Telegram Mini App");
         }
+
+        let coins = 0;
+        let countdownTimer;
+        const startButton = document.getElementById('startButton');
+        const coinAmountElement = document.getElementById('coinAmount');
+        const countdownElement = document.getElementById('countdown');
+
+        function updateCoinAmount() {
+            coinAmountElement.textContent = `Coins: ${coins}`;
+        }
+
+        function startCountdown() {
+            let timeLeft = 24 * 60 * 60; // 24 saat (saniye cinsinden)
+            startButton.disabled = true;
+
+            countdownTimer = setInterval(() => {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+
+                countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    coins += 10;
+                    updateCoinAmount();
+                    countdownElement.textContent = '';
+                    startButton.disabled = false;
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+
+        startButton.addEventListener('click', function() {
+            console.log("Start Earning Coins butonuna tıklandı");
+            tg.showAlert("Timer started! You'll receive points in 24 hours.");
+            startCountdown();
+        });
+
+        updateCoinAmount();
+
+        // ... mevcut kod ...
     </script>
 </body>
 </html>
