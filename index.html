@@ -13,7 +13,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f2f5;
+            background-color: black;
         }
         .container {
             text-align: center;
@@ -45,24 +45,23 @@
     </div>
 
     <script>
+        console.log("Script başladı");
         let tg = window.Telegram.WebApp;
 
         if (tg) {
-            console.log("Telegram Web App API loaded successfully");
+            console.log("Telegram Web App API yüklendi", tg);
             tg.expand();
 
-            tg.MainButton.setText("CLOSE").show().onClick(function(){
-                tg.close();
-            });
+            // Removed the MainButton (close button) code
 
             document.getElementById('startButton').addEventListener('click', function() {
+                console.log("Start butonuna tıklandı");
                 tg.showAlert("Timer started! You'll receive points in 24 hours.");
-                // Burada gerçek zamanlı bir sayaç başlatabilirsiniz
             });
 
             tg.ready();
         } else {
-            console.error("Telegram Web App API not loaded");
+            console.error("Telegram Web App API yüklenemedi");
             alert("This page should be opened as a Telegram Mini App");
         }
     </script>
