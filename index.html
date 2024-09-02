@@ -49,6 +49,12 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        #message {
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -56,6 +62,7 @@
         <img src="https://images.theconversation.com/files/38926/original/5cwx89t4-1389586191.jpg" alt="Meme Sticker">
         <div id="coinAmount">Coins: 0</div>
         <button id="startButton">Start Earning Coins</button>
+        <div id="message"></div>
         <div id="countdown"></div>
     </div>
 
@@ -85,6 +92,7 @@
         const startButton = document.getElementById('startButton');
         const coinAmountElement = document.getElementById('coinAmount');
         const countdownElement = document.getElementById('countdown');
+        const messageElement = document.getElementById('message');
 
         function updateCoinAmount() {
             coinAmountElement.textContent = `Coins: ${coins}`;
@@ -93,6 +101,7 @@
         function startCountdown() {
             let timeLeft = 24 * 60 * 60; // 24 saat (saniye cinsinden)
             startButton.disabled = true;
+            messageElement.textContent = "Timer started! You'll receive points in 24 hours.";
 
             countdownTimer = setInterval(() => {
                 const hours = Math.floor(timeLeft / 3600);
@@ -107,6 +116,7 @@
                     updateCoinAmount();
                     countdownElement.textContent = '';
                     startButton.disabled = false;
+                    messageElement.textContent = "You've earned 10 coins! Start again to earn more.";
                 }
 
                 timeLeft--;
@@ -115,7 +125,6 @@
 
         startButton.addEventListener('click', function() {
             console.log("Start Earning Coins butonuna tıklandı");
-            tg.showAlert("Timer started! You'll receive points in 24 hours.");
             startCountdown();
         });
 
