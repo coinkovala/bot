@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://images.theconversation.com/files/38926/original/5cwx89t4-1389586191.jpg" alt="Meme Sticker">
+        <button id="startButton">Start</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+
+        tg.expand();
+
+        tg.MainButton.setText("CLOSE").show().onClick(function(){
+            tg.close();
+        });
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            tg.showAlert("Timer started! You'll receive points in 24 hours.");
+            // Burada gerçek zamanlı bir sayaç başlatabilirsiniz
+        });
+
+        tg.ready();
+    </script>
+</body>
+</html>
