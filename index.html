@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -47,18 +47,24 @@
     <script>
         let tg = window.Telegram.WebApp;
 
-        tg.expand();
+        if (tg) {
+            console.log("Telegram Web App API loaded successfully");
+            tg.expand();
 
-        tg.MainButton.setText("CLOSE").show().onClick(function(){
-            tg.close();
-        });
+            tg.MainButton.setText("CLOSE").show().onClick(function(){
+                tg.close();
+            });
 
-        document.getElementById('startButton').addEventListener('click', function() {
-            tg.showAlert("Timer started! You'll receive points in 24 hours.");
-            // Burada gerçek zamanlı bir sayaç başlatabilirsiniz
-        });
+            document.getElementById('startButton').addEventListener('click', function() {
+                tg.showAlert("Timer started! You'll receive points in 24 hours.");
+                // Burada gerçek zamanlı bir sayaç başlatabilirsiniz
+            });
 
-        tg.ready();
+            tg.ready();
+        } else {
+            console.error("Telegram Web App API not loaded");
+            alert("This page should be opened as a Telegram Mini App");
+        }
     </script>
 </body>
 </html>
