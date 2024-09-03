@@ -78,7 +78,8 @@
 
             document.getElementById('startButton').addEventListener('click', function() {
                 console.log("Start Earning Coins butonuna tıklandı");
-                tg.showAlert("Timer started! You'll receive points in 24 hours.");
+                tg.showAlert("Timer started! You'll receive points in 1 minute.");
+                startCountdown();
             });
 
             tg.ready();
