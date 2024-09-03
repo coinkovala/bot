@@ -87,8 +87,9 @@
             alert("This page should be opened as a Telegram Mini App");
         }
 
-        let coins = 0;
+        let coins = parseInt(localStorage.getItem('coins')) || 0;
         let countdownTimer;
+        let endTime = parseInt(localStorage.getItem('endTime')) || 0;
         const startButton = document.getElementById('startButton');
         const coinAmountElement = document.getElementById('coinAmount');
         const countdownElement = document.getElementById('countdown');
@@ -96,31 +97,36 @@
 
         function updateCoinAmount() {
             coinAmountElement.textContent = `Coins: ${coins}`;
+            localStorage.setItem('coins', coins);
         }
 
         function startCountdown() {
-            let timeLeft = 24 * 60 * 60; // 24 saat (saniye cinsinden)
+            endTime = Date.now() + 60 * 1000; // 1 dakika sonrası
+            localStorage.setItem('endTime', endTime);
             startButton.disabled = true;
-            messageElement.textContent = "Timer started! You'll receive points in 24 hours.";
+            messageElement.textContent = "Timer started! You'll receive points in 1 minute.";
+            updateCountdown();
+        }
 
-            countdownTimer = setInterval(() => {
-                const hours = Math.floor(timeLeft / 3600);
-                const minutes = Math.floor((timeLeft % 3600) / 60);
-                const seconds = timeLeft % 60;
+        function updateCountdown() {
+            const now = Date.now();
+            const timeLeft = Math.max(0, endTime - now);
 
-                countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft > 0) {
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
 
-                if (timeLeft <= 0) {
-                    clearInterval(countdownTimer);
-                    coins += 10;
-                    updateCoinAmount();
-                    countdownElement.textContent = '';
-                    startButton.disabled = false;
-                    messageElement.textContent = "You've earned 10 coins! Start again to earn more.";
-                }
-
-                timeLeft--;
-            }, 1000);
+                countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                startButton.disabled = true;
+                setTimeout(updateCountdown, 1000);
+            } else {
+                countdownElement.textContent = '';
+                startButton.disabled = false;
+                messageElement.textContent = "You've earned 10 coins! Start again to earn more.";
+                coins += 10;
+                updateCoinAmount();
+                localStorage.removeItem('endTime');
+            }
         }
 
         startButton.addEventListener('click', function() {
@@ -129,6 +135,9 @@
         });
 
         updateCoinAmount();
+        if (endTime > Date.now()) {
+            updateCountdown();
+        }
 
         // ... mevcut kod ...
     </script>
